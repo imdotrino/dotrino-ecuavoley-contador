@@ -44,14 +44,16 @@
     background: #111827;
   }
 
-  /* --- Barra superior --- */
-  .topbar {
-    display: flex;
-    background: #111827;
-    border-bottom: 2px solid #1f2937;
+  /* --- Barra superior: estilos del light DOM para <dotrino-topbar> --- */
+  dotrino-topbar {
+    --dotrino-topbar-bg: #111827;
+    --dotrino-topbar-border: #1f2937;
+    --dotrino-topbar-text: #e2e8f0;
+    --dotrino-topbar-muted: #9ca3af;
+    --dotrino-topbar-accent: #f59e0b;
+    --dotrino-topbar-accent-text: #111827;
   }
-  .topbar button {
-    flex: 1;
+  dotrino-topbar button {
     border: none;
     background: transparent;
     color: #9ca3af;
@@ -62,8 +64,7 @@
     letter-spacing: .05em;
     cursor: pointer;
   }
-  .topbar button:active { background: #1f2937; }
-  .topbar-coin { flex: 0 0 auto; display: flex; align-items: center; padding: 0 12px; }
+  dotrino-topbar button:active { color: #fff; }
 
   /* --- Marcador --- */
   .marcador {
@@ -311,6 +312,11 @@
     font-size: 2vh;
   }
 </style>
+<!-- Barra superior estándar del ecosistema (@dotrino/topbar, CONVENCIONES §5/§6.1).
+     OJO: por CDN va SIEMPRE con +esm, no con /src/index.js (sus imports desnudos
+     no resuelven en el navegador). Trae dentro <dotrino-back>, <dotrino-support>,
+     toggle de idioma y botón de perfil. -->
+<script type="module" src="https://cdn.jsdelivr.net/npm/@dotrino/topbar@0.5/+esm"></script>
 <!-- Analítica cookieless autohosteada (GoatCounter); no cuenta en localhost/LAN. -->
 <script>window.goatcounter={path:function(p){return location.hostname+p}}</script>
 <script data-goatcounter="https://goat.dotrino.com/count" async src="https://goat.dotrino.com/count.js"></script>
@@ -330,12 +336,13 @@
 </head>
 <body>
 
-  <div class="topbar">
-    <dotrino-back style="align-self:center;color:#e2e8f0;--cc-back-size:36px;margin:0 2px"></dotrino-back>
+  <dotrino-topbar brand="Ecuavóley" icon="./icon.svg"
+    support-repo="imdotrino/dotrino-ecuavoley-contador"
+    support-discord="https://discord.gg/D648uq7cth"
+    profile no-lang>
     <button id="btnResultados">📋 Resultados</button>
     <button id="btnInstalar" style="display:none">⬇ Instalar</button>
-    <dotrino-support class="topbar-coin" href="https://ko-fi.com/dotrino" repo="imdotrino/dotrino-ecuavoley-contador" discord="https://discord.gg/D648uq7cth"></dotrino-support>
-  </div>
+  </dotrino-topbar>
 
   <div class="marcador">
     <div class="equipo izq activo" id="eqIzq">
@@ -661,7 +668,6 @@
     deferredPrompt = null;
   });
 </script>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@dotrino/support@0.3/src/index.js"></script>
   <!-- Navegación "volver" unificada del ecosistema: chevron del header + botón
        físico de Android / gesto de iOS / atrás del navegador → cierra el modal
        de resultados; si no hay nada → dotrino.com. -->
