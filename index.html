@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#00658c">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -27,6 +27,7 @@
 <meta name="twitter:title" content="Contador Ecuavóley" />
 <meta name="twitter:description" content="Marcador táctil para partidos de ecuavóley. Gana el primero en llegar a 15." />
 <meta name="twitter:image" content="https://ecuavoley.dotrino.com/og.jpg" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@dotrino/theme@0.1/src/theme.css">
 <style>
   /* touch-action: manipulation → en iOS el doble-tap NO hace zoom (Safari ignora
      user-scalable=no desde iOS 10); además quita el delay de 300ms al tocar. */
@@ -34,29 +35,21 @@
   html, body {
     height: 100%;
     overflow: hidden;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--dt-font);
     user-select: none;
     -webkit-user-select: none;
   }
   body {
     display: flex;
     flex-direction: column;
-    background: #111827;
+    background: var(--dt-bg);
   }
 
   /* --- Barra superior: estilos del light DOM para <dotrino-topbar> --- */
-  dotrino-topbar {
-    --dotrino-topbar-bg: #111827;
-    --dotrino-topbar-border: #1f2937;
-    --dotrino-topbar-text: #e2e8f0;
-    --dotrino-topbar-muted: #9ca3af;
-    --dotrino-topbar-accent: #f59e0b;
-    --dotrino-topbar-accent-text: #111827;
-  }
   dotrino-topbar button {
     border: none;
     background: transparent;
-    color: #9ca3af;
+    color: var(--dt-text-dim);
     font-size: 1.9vh;
     font-weight: 700;
     padding: 1.4vh 0;
@@ -64,7 +57,7 @@
     letter-spacing: .05em;
     cursor: pointer;
   }
-  dotrino-topbar button:active { color: #fff; }
+  dotrino-topbar button:active { color: var(--dt-text); }
 
   /* --- Marcador --- */
   .marcador {
@@ -189,14 +182,14 @@
   /* --- Barra de control --- */
   .control {
     display: flex;
-    background: #111827;
-    border-top: 2px solid #1f2937;
+    background: var(--dt-surface);
+    border-top: 2px solid var(--dt-line-soft);
   }
   .control button {
     flex: 1;
     border: none;
     background: transparent;
-    color: #9ca3af;
+    color: var(--dt-text-dim);
     font-size: 1.9vh;
     font-weight: 700;
     padding: 1.6vh 0;
@@ -204,13 +197,13 @@
     letter-spacing: .05em;
     cursor: pointer;
   }
-  .control button:active { background: #1f2937; }
+  .control button:active { background: var(--dt-surface-3); }
   .btn-cambio {
-    background: #f59e0b !important;
-    color: #111827 !important;
+    background: var(--dt-accent) !important;
+    color: var(--dt-accent-ink) !important;
     font-size: 2.4vh !important;
   }
-  .btn-cambio:active { background: #d97706 !important; }
+  .btn-cambio:active { background: var(--dt-accent-press) !important; }
 
   .ganador {
     position: absolute;
@@ -233,8 +226,8 @@
   }
   .modal.abierto { display: flex; }
   .modal-caja {
-    background: #1f2937;
-    color: #fff;
+    background: var(--dt-surface);
+    color: var(--dt-text);
     border-radius: 12px;
     width: 100%;
     max-width: 520px;
@@ -248,7 +241,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 2vh 4vw;
-    border-bottom: 1px solid #374151;
+    border-bottom: 1px solid var(--dt-line-soft);
   }
   .modal-head h2 {
     font-size: 2.4vh;
@@ -259,7 +252,7 @@
   .modal-cerrar {
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--dt-text);
     font-size: 3vh;
     cursor: pointer;
     padding: 0 1vw;
@@ -273,7 +266,7 @@
     align-items: center;
     gap: 2vw;
     padding: 1.5vh 4vw;
-    border-bottom: 1px solid #374151;
+    border-bottom: 1px solid var(--dt-line-soft);
   }
   .resultado:last-child { border-bottom: none; }
   .resultado-info {
@@ -282,7 +275,7 @@
   }
   .resultado-fecha {
     font-size: 1.5vh;
-    color: #9ca3af;
+    color: var(--dt-text-dim);
     margin-bottom: .4vh;
   }
   .resultado-marcador {
@@ -292,7 +285,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .resultado-marcador .gana { color: #fde047; }
+  .resultado-marcador .gana { color: var(--dt-gold); }
   .borrar {
     background: #b91c1c;
     border: none;
@@ -308,7 +301,7 @@
   .vacio {
     padding: 4vh 4vw;
     text-align: center;
-    color: #9ca3af;
+    color: var(--dt-text-dim);
     font-size: 2vh;
   }
 </style>
@@ -316,7 +309,7 @@
      OJO: por CDN va SIEMPRE con +esm, no con /src/index.js (sus imports desnudos
      no resuelven en el navegador). Trae dentro <dotrino-back>, <dotrino-support>,
      toggle de idioma y botón de perfil. -->
-<script type="module" src="https://cdn.jsdelivr.net/npm/@dotrino/topbar@0.5/+esm"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@dotrino/topbar@0.16/+esm"></script>
 <!-- Analítica cookieless autohosteada (GoatCounter); no cuenta en localhost/LAN. -->
 <script>window.goatcounter={path:function(p){return location.hostname+p}}</script>
 <script data-goatcounter="https://goat.dotrino.com/count" async src="https://goat.dotrino.com/count.js"></script>
@@ -340,7 +333,7 @@
   <dotrino-topbar brand="Ecuavóley" icon="./icon.svg"
     support-repo="imdotrino/dotrino-ecuavoley-contador"
     support-discord="https://discord.gg/D648uq7cth"
-    profile no-lang>
+    profile theme no-lang>
     <button id="btnResultados">📋 Resultados</button>
     <button id="btnInstalar" style="display:none">⬇ Instalar</button>
   </dotrino-topbar>
