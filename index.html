@@ -58,6 +58,12 @@
     cursor: pointer;
   }
   dotrino-topbar button:active { color: var(--dt-text); }
+  dotrino-install {
+    --cc-install-bg: transparent;
+    --cc-install-bg-hover: transparent;
+    --cc-install-color: var(--dt-text-dim);
+    --cc-install-font-size: 1.9vh;
+  }
 
   /* --- Marcador --- */
   .board {
@@ -335,6 +341,7 @@
      no resuelven en el navegador). Trae dentro <dotrino-back>, <dotrino-support>,
      toggle de idioma y botón de perfil. -->
 <script type="module" src="https://cdn.jsdelivr.net/npm/@dotrino/topbar@0.16/+esm"></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@dotrino/install@0.3/+esm"></script>
 <!-- Analítica cookieless autohosteada (GoatCounter); no cuenta en localhost/LAN. -->
 <script>window.goatcounter={path:function(p){return location.hostname+p}}</script>
 <script data-goatcounter="https://goat.dotrino.com/count" async src="https://goat.dotrino.com/count.js"></script>
@@ -360,7 +367,7 @@
     support-discord="https://discord.gg/D648uq7cth"
     profile theme no-lang>
     <button id="btnResults">📋 Resultados</button>
-    <button id="btnInstall" style="display:none">⬇ Instalar</button>
+    <dotrino-install lang="es"></dotrino-install>
   </dotrino-topbar>
 
   <div class="board">
@@ -705,37 +712,13 @@
   loadCurrent();
   render();
 
-  // --- PWA: service worker + botón Instalar ---
+  // --- PWA: service worker (el botón Instalar es <dotrino-install>) ---
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').catch(() => {});
     });
   }
 
-  let deferredPrompt = null;
-  const btnInstall = $('btnInstall');
-  const isInstalled = () =>
-    window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone === true;
-
-  if (!isInstalled()) {
-    window.addEventListener('beforeinstallprompt', e => {
-      e.preventDefault();
-      deferredPrompt = e;
-      btnInstall.style.display = '';
-    });
-  }
-  btnInstall.addEventListener('click', async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    btnInstall.style.display = 'none';
-  });
-  window.addEventListener('appinstalled', () => {
-    btnInstall.style.display = 'none';
-    deferredPrompt = null;
-  });
 </script>
   <!-- Navegación "volver" unificada del ecosistema: chevron del header + botón
        físico de Android / gesto de iOS / atrás del navegador → cierra los modales;
